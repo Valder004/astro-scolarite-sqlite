@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-         script: |
+          script: |
             set -e
 
             export BUN_INSTALL="$HOME/.bun"
@@ -32,7 +32,7 @@ jobs:
 
             echo "Mise à jour du code..."
             git pull origin main
-            
+
             echo "Installation des dépendances..."
             bun install
 
