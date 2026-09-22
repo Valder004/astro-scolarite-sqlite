@@ -48,3 +48,11 @@ jobs:
             echo "======================================"
             echo "Déploiement terminé"
             echo "======================================"
+            echo "Redémarrage de l'application..."
+            sudo systemctl restart scolarite
+
+            echo "Attente du démarrage du service..."
+            sleep 3
+
+            echo "Health check..."
+            curl --fail http://127.0.0.1:3000/
