@@ -18,10 +18,9 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: |
+         script: |
             set -e
 
-            # Charger l'environnement de Bun pour la session SSH non interactive
             export BUN_INSTALL="$HOME/.bun"
             export PATH="$BUN_INSTALL/bin:$PATH"
 
@@ -42,9 +41,6 @@ jobs:
 
             echo "Redémarrage de l'application..."
             sudo systemctl restart scolarite
-
-            echo "Vérification du service..."
-            sudo systemctl is-active --quiet scolarite
 
             echo "Health check..."
             curl --fail http://127.0.0.1:3000/
