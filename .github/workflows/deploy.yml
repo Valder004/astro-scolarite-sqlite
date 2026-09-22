@@ -21,6 +21,10 @@ jobs:
           script: |
             set -e
 
+            # Charger l'environnement de Bun pour la session SSH non interactive
+            export BUN_INSTALL="$HOME/.bun"
+            export PATH="$BUN_INSTALL/bin:$PATH"
+
             echo "======================================"
             echo "Début du déploiement"
             echo "======================================"
@@ -31,7 +35,7 @@ jobs:
             git pull origin main
             
             echo "Installation des dépendances..."
-            bun ci
+            bun install
 
             echo "Compilation Astro..."
             bun run --bun build
