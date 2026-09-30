@@ -1,5 +1,4 @@
 ---
-import { SignIn } from 'auth-astro/components';
 import Layout from '../layouts/Layout.astro';
 ---
 
@@ -9,14 +8,48 @@ import Layout from '../layouts/Layout.astro';
 			<p class="login-kicker">Portail de scolarité</p>
 			<h1 id="login-title">Connexion</h1>
 			<p class="login-description">Connectez-vous avec votre compte Google pour accéder à l’application.</p>
-			<a href="/api/auth/signin/google" class="google-signin">
-				<span class="google-mark" aria-hidden="true">G</span>
-				<span>Se connecter avec Google</span>
-			</a>
+			<form id="google-signin-form" action="/api/auth/signin/google" method="post">
+				<input id="csrf-token" type="hidden" name="csrfToken" value="">
+				<button type="submit" class="google-signin">
+					<span class="google-mark" aria-hidden="true">G</span>
+					<span>Se connecter avec Google</span>
+				</button>
+			</form>
+			<p id="login-error" class="login-error" role="status" aria-live="polite"></p>
 
 		</div>
 	</section>
 </Layout>
+
+<script>
+	const form = document.querySelector<HTMLFormElement>('#google-signin-form');
+	const csrfInput = document.querySelector<HTMLInputElement>('#csrf-token');
+	const errorMessage = document.querySelector<HTMLElement>('#login-error');
+
+	form?.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		if (!csrfInput) return;
+
+		const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+		if (button) button.disabled = true;
+
+		try {
+			const response = await fetch('/api/auth/csrf', { credentials: 'same-origin' });
+			if (!response.ok) throw new Error('Impossible de récupérer le jeton CSRF.');
+
+			const { csrfToken } = await response.json();
+			if (!csrfToken) throw new Error('Le jeton CSRF est absent.');
+
+			csrfInput.value = csrfToken;
+			form.submit();
+		} catch {
+			if (errorMessage) {
+				errorMessage.textContent = 'La connexion n’a pas pu démarrer. Réessayez.';
+			}
+			if (button) button.disabled = false;
+		}
+	});
+</script>
 
 <style>
 	.login-page {
@@ -55,6 +88,12 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1.55;
 	}
 
+	.login-error {
+		margin: 12px 0 0;
+		color: #a52c2c;
+		font-size: 0.9rem;
+	}
+
 	:global(.google-signin) {
 		display: flex;
 		width: 100%;
@@ -75,6 +114,11 @@ import Layout from '../layouts/Layout.astro';
 	:global(.google-signin:hover) {
 		border-color: #8c9aab;
 		background: #f5f7fa;
+	}
+
+	:global(.google-signin:disabled) {
+		cursor: wait;
+		opacity: 0.7;
 	}
 
 	:global(.google-signin:focus-visible) {
