@@ -1,7 +1,7 @@
-import { AstroAuth } from "@auth/astro";
 import Google from "@auth/core/providers/google";
+import { defineConfig } from "auth-astro";
 
-export const { GET, POST } = AstroAuth({
+export default defineConfig({
   secret: import.meta.env.AUTH_SECRET,
   trustHost: true,
   providers: [
