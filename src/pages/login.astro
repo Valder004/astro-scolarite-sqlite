@@ -1,0 +1,95 @@
+---
+import { SignIn } from 'auth-astro/components';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Connexion">
+	<section class="login-page" aria-labelledby="login-title">
+		<div class="login-panel">
+			<p class="login-kicker">Portail de scolarité</p>
+			<h1 id="login-title">Connexion</h1>
+			<p class="login-description">Connectez-vous avec votre compte Google pour accéder à l’application.</p>
+			<SignIn provider="google" class="google-signin">
+				<span class="google-mark" aria-hidden="true">G</span>
+				<span>Se connecter avec Google</span>
+			</SignIn>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.login-page {
+		min-height: calc(100vh - 100px);
+		display: grid;
+		place-items: center;
+		padding: 32px 16px;
+	}
+
+	.login-panel {
+		width: min(100%, 420px);
+		padding: 36px;
+		border: 1px solid #d9e0e8;
+		border-top: 4px solid #2f765b;
+		border-radius: 8px;
+		background: #fff;
+		box-shadow: 0 12px 32px #17203312;
+	}
+
+	.login-kicker {
+		margin: 0 0 10px;
+		color: #2f765b;
+		font-size: 0.78rem;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: 1.8rem;
+	}
+
+	.login-description {
+		margin: 12px 0 28px;
+		color: #536174;
+		line-height: 1.55;
+	}
+
+	:global(.google-signin) {
+		display: flex;
+		width: 100%;
+		min-height: 48px;
+		align-items: center;
+		justify-content: center;
+		gap: 12px;
+		border: 1px solid #c9d1db;
+		border-radius: 6px;
+		background: #fff;
+		color: #172033;
+		cursor: pointer;
+		font: inherit;
+		font-weight: 650;
+		transition: background-color 140ms ease, border-color 140ms ease;
+	}
+
+	:global(.google-signin:hover) {
+		border-color: #8c9aab;
+		background: #f5f7fa;
+	}
+
+	:global(.google-signin:focus-visible) {
+		outline: 3px solid #2f765b55;
+		outline-offset: 3px;
+	}
+
+	.google-mark {
+		color: #4285f4;
+		font-size: 1.15rem;
+		font-weight: 800;
+	}
+
+	@media (max-width: 480px) {
+		.login-panel {
+			padding: 28px 22px;
+		}
+	}
+</style>
